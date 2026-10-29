@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <!-- 1. Load jQuery via CDN -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+    <h2>User Login</h2>
+    <form id="loginForm">
+        <input type="text" id="username" placeholder="Enter username (e.g. aokutu)" required />
+        <button type="submit">Log In</button>
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            $('#loginForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                // Grab the username using jQuery syntax
+                const username = $('#username').val();
+
+                // Send POST request using jQuery $.ajax
+                $.ajax({
+                    url: '/login',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ username: username }),
+                    success: function(data) {
+                        // Save the token securely in browser storage
+                        localStorage.setItem('jwt_token', data.token);
+                        
+                        alert("Login successful! Redirecting to dashboard...");
+                        // Redirect to dashboard
+                        window.location.href = '/dashboard.html';
+                    },
+                    error: function(xhr) {
+                        const errorMsg = xhr.responseJSON ? xhr.responseJSON.message : "Login failed";
+                        alert(errorMsg);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
