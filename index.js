@@ -1,8 +1,11 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
-
+const http = require('http');
+const WebSocket = require('ws');
 const app = express();
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
 
 dotenv.config();
 
@@ -13,7 +16,7 @@ const SECRET_KEY = process.env.JWT_SECRET;
 const PORT = process.env.PORT || 3000;
 
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server is up and running on ${PORT} ...`);
 });
 
