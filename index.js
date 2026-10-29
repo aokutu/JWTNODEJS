@@ -6,7 +6,11 @@ const WebSocket = require('ws');
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
-
+/////// establish connection to  ws server 
+wss.on('connection', (socket) => {
+    console.log('A client has connected');
+});
+/////////////
 dotenv.config();
 
 app.use(express.json());
