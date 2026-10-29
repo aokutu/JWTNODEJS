@@ -1,0 +1,21 @@
+image: node:latest
+
+stages:
+  - install
+  - test
+
+install_dependencies:
+  stage: install
+  script:
+    - npm ci
+  artifacts:
+    paths:
+      - node_modules/
+    expire_in: 1 hour
+
+run_tests:
+  stage: test
+  dependencies:
+    - install_dependencies
+  script:
+    - npm test
