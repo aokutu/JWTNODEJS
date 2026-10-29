@@ -9,6 +9,7 @@ const wss = new WebSocket.Server({ server });
 /////// establish connection to  ws server 
 wss.on('connection', (socket) => {
     console.log('A client has connected');
+    socket.send('Hello client! Welcome to our WebSocket server.');
 });
 /////////////
 dotenv.config();
