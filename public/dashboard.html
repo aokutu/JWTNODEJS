@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <!-- Load jQuery via CDN -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+    <h1>Secure Dashboard</h1>
+    <div id="welcomeMessage">Loading secure data...</div>
+    <button id="logoutBtn" style="margin-top: 20px;">Log Out</button>
+
+    <script>
+        $(document).ready(function() {
+            // 1. Grab the token from browser storage
+            const token = localStorage.getItem('jwt_token');
+
+            if (!token) {
+                alert("No token found. Please log in first.");
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // 2. Fetch the protected route, passing the Authorization header
+            $.ajax({
+                url: '/dashboard',
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+                success: function(result) {
+                    // 3. Render data into the DOM using jQuery
+                    $('#welcomeMessage').html(`
+                        <p style="color: green;">${result.message}</p>
+                        <p>Logged in user ID: <strong>${result.user.userId}</strong></p>
+                        <p>Role: <strong>${result.user.role}</strong></p>
+                    `);
+                },
+                error: function(xhr) {
+                    alert("Session expired or invalid token.");
+                    localStorage.removeItem('jwt_token');
+                    window.location.href = '/login.html';
+                }
+            });
+
+            // Handle logout button click
+            $('#logoutBtn').on('click', function() {
+                localStorage.removeItem('jwt_token');
+                window.location.href = '/login.html';
+            });
+        });
+    </script>
+</body>
+</html>
